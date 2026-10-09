@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keerthana Murugaraj — Research Search</title>
+<meta name="description" content="Search the publications and open-source code of Keerthana Murugaraj: RAG evaluation, retrieval, and topic modeling for historical archives.">
+<link rel="canonical" href="https://keerthanamurugaraj.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://keerthanamurugaraj.github.io/">
+<meta property="og:title" content="Keerthana Murugaraj — Research Search">
+<meta property="og:description" content="Publications and open-source code on RAG evaluation, retrieval and topic modeling, in a small search engine.">
+<meta property="og:image" content="https://keerthanamurugaraj.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%230F766E'/><text x='50' y='68' text-anchor='middle' font-family='Georgia,serif' font-size='46' fill='%23F7F7F4'>KM</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<style>
+  :root {
+    --bg: #F7F7F4;
+    --bg-2: #EEEEE9;
+    --bg-3: #E3E4DE;
+    --card: #FCFCFB;
+    --border: #DADBD4;
+    --text: #1B1F23;
+    --text-2: #5F6469;
+    --accent: #0F766E;
+    --accent-soft: #D9ECE9;
+    --on-accent: #FFFFFF;
+    --mark: #FBE7A1;
+    --shadow: 0 1px 2px rgb(20 30 30 / 0.05), 0 8px 24px rgb(20 30 30 / 0.06);
+    /* Topic colours, in fixed order */
+    --t1: #2a78d6; --t2: #eb6834; --t3: #1baf7a; --t4: #eda100; --t5: #e87ba4; --t6: #008300;
+    --serif: "Source Serif 4", "Iowan Old Style", Palatino, Georgia, serif;
+    --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  :root[data-mode="dark"] {
+    --bg: #17191C;
+    --bg-2: #1F2226;
+    --bg-3: #2A2E33;
+    --card: #1C1F22;
+    --border: #33383E;
+    --text: #ECEDEA;
+    --text-2: #A3A9AE;
+    --accent: #4FD1C5;
+    --accent-soft: #1D3A38;
+    --on-accent: #0E1113;
+    --mark: #5C4A0E;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.25);
+    --t1: #3987e5; --t2: #d95926; --t3: #199e70; --t4: #c98500; --t5: #d55181; --t6: #008300;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header and hero */
+  .band { background: radial-gradient(70% 100% at 50% 0%, var(--accent-soft), transparent 72%); }
+  .top-row { display: flex; align-items: center; gap: 14px; padding: 18px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .logo {
+    display: inline-grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 8px;
+    background: var(--accent); color: var(--on-accent); font-family: var(--serif); font-size: 13px; font-weight: 500;
+  }
+  .top-row .spacer { flex: 1; }
+  .top-row a { font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .top-row a:hover { text-decoration: underline; }
+  #mode-btn { border: 1px solid var(--border); border-radius: 8px; background: var(--card); padding: 4px 10px; font-size: 14px; }
+
+  .hero { padding: 40px 0 34px; text-align: center; }
+  .eyebrow { margin: 0 0 10px; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .hero h1 { margin: 0 0 10px; font-family: var(--serif); font-weight: 600; font-size: clamp(34px, 6vw, 54px); line-height: 1.08; letter-spacing: -0.01em; text-wrap: balance; }
+  .hero .lede { margin: 0 auto 26px; max-width: 56ch; font-size: 17px; color: var(--text-2); text-wrap: pretty; }
+
+  #box {
+    display: flex; align-items: center; gap: 12px; max-width: 680px; margin: 0 auto; padding: 8px 10px 8px 20px;
+    border: 1.5px solid var(--border); border-radius: 999px; background: var(--card); box-shadow: var(--shadow);
+    transition: border-color 0.15s;
+  }
+  #box:focus-within { border-color: var(--accent); }
+  #box svg { flex: none; color: var(--text-2); }
+  #q { flex: 1; min-width: 0; padding: 10px 0; border: 0; outline: 0; background: none; color: inherit; font: inherit; font-size: 18px; }
+  #q::placeholder { color: var(--text-2); }
+  #q::-webkit-search-cancel-button { display: none; }
+  #clear { border: 0; border-radius: 999px; background: none; padding: 6px 12px; font-size: 14px; color: var(--text-2); }
+  #clear:hover { background: var(--bg-3); }
+  kbd { padding: 1px 7px; border: 1px solid var(--border); border-radius: 5px; font-family: var(--mono); font-size: 12px; color: var(--text-2); }
+  #slash { margin-right: 10px; }
+  .tries { margin-top: 14px; font-size: 14px; color: var(--text-2); }
+  .try { border: 0; background: none; padding: 0; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .open-to { display: inline-flex; align-items: center; gap: 9px; margin-top: 20px; padding: 5px 14px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); font-size: 14px; color: var(--text); text-decoration: none; }
+  .open-to:hover { border-color: var(--accent); }
+  .open-to i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: none; }
+
+  /* Stat cards */
+  .stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin-top: 4px; }
+  .stat { padding: 14px 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); }
+  .stat b { display: block; font-family: var(--serif); font-size: 30px; font-weight: 600; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 13px; color: var(--text-2); }
+
+  /* Tabs, facets, sort */
+  .tabs { display: flex; gap: 24px; margin-top: 30px; border-bottom: 1px solid var(--border); }
+  .tab { border: 0; border-bottom: 2px solid transparent; background: none; padding: 8px 0; margin-bottom: -1px; font-size: 15px; font-weight: 500; color: var(--text-2); }
+  .tab[aria-selected="true"] { border-color: var(--accent); color: var(--text); font-weight: 600; }
+  .tab .n { font-variant-numeric: tabular-nums; font-weight: 400; color: var(--text-2); }
+  .bar-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 14px 0 0; }
+  .facets { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; min-width: 240px; }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--c); flex: none; }
+  .facet { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); padding: 4px 12px; font-size: 14px; transition: border-color 0.15s, background 0.15s; }
+  .facet:hover { border-color: var(--c); }
+  .facet[aria-pressed="true"] { border-color: var(--c); background: color-mix(in srgb, var(--c) 16%, var(--card)); }
+  .facet .n { color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .sort { display: flex; align-items: center; gap: 4px; font-size: 14px; color: var(--text-2); }
+  .sort button { border: 0; border-radius: 6px; background: none; padding: 3px 8px; font-size: 14px; color: var(--text-2); }
+  .sort button[aria-pressed="true"] { background: var(--bg-3); color: var(--text); }
+
+  /* Results */
+  .cols { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; padding: 6px 0 48px; align-items: start; }
+  #stats { margin: 12px 0 10px; font-size: 13.5px; color: var(--text-2); }
+  #results { display: grid; gap: 12px; }
+  .result {
+    display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 20px; padding: 18px 20px;
+    border: 1px solid var(--border); border-radius: 16px; background: var(--card);
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  }
+  .result:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); box-shadow: var(--shadow); transform: translateY(-1px); }
+  #results.fresh .result { animation: rise 0.25s ease-out backwards; }
+  #results.fresh .result:nth-child(2) { animation-delay: 0.03s; }
+  #results.fresh .result:nth-child(3) { animation-delay: 0.06s; }
+  #results.fresh .result:nth-child(n+4) { animation-delay: 0.09s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+
+  .rail { padding-right: 16px; border-right: 1px solid var(--border); }
+  .rail .big { display: block; font-family: var(--serif); font-size: 26px; font-weight: 600; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .rail .small { display: block; margin-top: 6px; font-size: 12.5px; line-height: 1.35; color: var(--text-2); }
+  .rail .small b { display: block; font-size: 17px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+
+  .crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); overflow-wrap: anywhere; }
+  .crumb.mono { font-family: var(--mono); font-size: 12.5px; }
+  .kind { padding: 1px 9px; border: 1px solid var(--text-2); border-radius: 5px; font-family: var(--sans); font-size: 11.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text); }
+  .kind.journal { border-color: var(--text); background: var(--text); color: var(--bg); }
+  .kind.preprint { border-style: dashed; }
+  .result h2 { margin: 6px 0 4px; font-family: var(--serif); font-weight: 600; font-size: 21px; line-height: 1.28; text-wrap: balance; }
+  .result h2 a { color: var(--text); text-decoration: none; }
+  .result h2 a:hover { color: var(--accent); }
+  .authors { margin: 0 0 8px; font-size: 14.5px; color: var(--text-2); }
+  .authors b { color: var(--text); font-weight: 600; }
+  .snippet { margin: 0 0 12px; max-width: 68ch; text-wrap: pretty; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; padding: 1px 10px 1px 8px; border: 1px solid var(--border); border-radius: 999px; background: var(--bg); font-size: 13px; }
+  .plain { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--bg-2); font-size: 13px; }
+  .score { display: flex; align-items: center; gap: 8px; margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .bar { width: 64px; height: 5px; border-radius: 3px; background: var(--bg-3); overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--accent); }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); font-size: 13.5px; font-weight: 500; color: var(--text); text-decoration: none; transition: border-color 0.15s, color 0.15s; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  details { margin-top: 12px; }
+  summary { width: fit-content; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--accent); }
+  details ul { margin: 8px 0 0; padding-left: 20px; max-width: 68ch; }
+  details li { margin-bottom: 4px; }
+  .empty { padding: 28px 20px; border: 1px dashed var(--border); border-radius: 16px; color: var(--text-2); }
+
+  /* Citations chart */
+  .chart { position: sticky; top: 16px; margin-top: 46px; padding: 18px 18px 12px; border: 1px solid var(--border); border-radius: 16px; background: var(--card); }
+  .chart h3 { margin: 0; font-family: var(--serif); font-size: 18px; font-weight: 600; }
+  .chart .sub { margin: 2px 0 12px; font-size: 12.5px; color: var(--text-2); }
+  .bars { display: grid; gap: 2px; }
+  .bar-item { display: grid; grid-template-columns: minmax(0, 1fr) 28px; gap: 2px 8px; padding: 6px 8px; margin: 0 -8px; border: 0; border-radius: 8px; background: none; text-align: left; }
+  .bar-item:hover, .bar-item[aria-pressed="true"] { background: var(--bg-2); }
+  .bar-item .label { grid-column: 1 / -1; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-item .label i { font-style: normal; color: var(--text-2); }
+  .bar-item .track { align-self: center; height: 8px; }
+  .bar-item .fill { display: block; height: 100%; min-width: 2px; border-radius: 0 4px 4px 0; background: var(--accent); }
+  .bar-item .val { font-size: 13px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+  .chart .hint { margin: 8px 0 0; font-size: 12.5px; color: var(--text-2); }
+
+  .btn.primary { padding: 8px 16px; border-color: var(--accent); background: var(--accent); font-size: 14.5px; color: var(--on-accent); }
+  .btn.primary:hover { color: var(--on-accent); filter: brightness(1.1); }
+  .cta { margin: 0 0 20px; }
+
+  /* About: skills and roles */
+  .about { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; padding: 36px 0 40px; border-top: 1px solid var(--border); align-items: start; }
+  .panel { padding: 22px 24px; border: 1px solid var(--border); border-radius: 16px; background: var(--card); }
+  .panel h2 { margin: 0 0 4px; font-family: var(--serif); font-size: 24px; font-weight: 600; line-height: 1.2; }
+  .panel > p { margin: 0 0 16px; color: var(--text-2); text-wrap: pretty; }
+  .skill-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; }
+  .panel h4 { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
+  .roles { display: grid; gap: 8px; margin: 0 0 18px; padding: 0; list-style: none; }
+  .roles li { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 10px; background: var(--bg-2); font-weight: 500; }
+  .roles li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: none; }
+  .panel .links { display: grid; gap: 4px; font-size: 14.5px; }
+
+  footer { padding: 16px 0 28px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-2); }
+
+  @media (max-width: 940px) {
+    .cols { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .chart { position: static; margin-top: 20px; }
+    .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .about { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .wrap { padding: 0 16px; }
+    .hero { padding: 24px 0 26px; }
+    #slash { display: none; }
+    .top-row a.opt { display: none; }
+    .facets { flex-basis: 100%; }
+    .stats { gap: 8px; }
+    .stat { padding: 10px 12px; }
+    .stat b { font-size: 24px; }
+    .result { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 16px; }
+    .rail { display: flex; align-items: baseline; gap: 12px; padding: 0 0 8px; border-right: 0; border-bottom: 1px solid var(--border); }
+    .rail .big { font-size: 20px; }
+    .rail .small { margin: 0; }
+    .rail .small b { display: inline; font-size: inherit; }
+    .panel { padding: 18px 16px; }
+    .skill-groups { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="band">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand"><span class="logo">KM</span> Keerthana Murugaraj</div>
+      <div class="spacer"></div>
+      <a class="opt" href="https://scholar.google.com/citations?hl=en&user=np0jog4AAAAJ" target="_blank" rel="noopener">Scholar ↗</a>
+      <a class="opt" href="https://github.com/KeerthanaMurugaraj" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/keerthana-murugaraj" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <button id="mode-btn" aria-label="Switch colour mode">◐</button>
+    </div>
+
+    <div class="hero">
+      <p class="eyebrow">Doctoral researcher · NLP and information retrieval</p>
+      <h1>Search my research</h1>
+      <p class="lede">Publications and open-source code on RAG evaluation, retrieval and topic modeling for historical archives, ranked live for whatever you type.</p>
+      <div id="box" role="search">
+        <svg width="20" height="20" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.8"/><path d="M12.5 12.5L16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="q" type="search" placeholder="Try “multi-hop retrieval”" aria-label="Search publications and code" autocomplete="off" spellcheck="false">
+        <button id="clear" hidden>Clear</button>
+        <kbd id="slash">/</kbd>
+      </div>
+      <div class="tries">Try: <span id="tries"></span></div>
+      <a class="open-to" href="#about"><i></i> Open to Applied Scientist, Research Engineer and Generative AI roles</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="stats" id="metrics"></div>
+
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="bar-row">
+    <div class="facets" id="facets"></div>
+    <div class="sort" id="sort"></div>
+  </div>
+
+  <div class="cols">
+    <main>
+      <div id="stats" aria-live="polite"></div>
+      <div id="results"></div>
+    </main>
+    <aside class="chart">
+      <h3>Citations by paper</h3>
+      <p class="sub">Google Scholar, <span class="asof"></span></p>
+      <div class="bars" id="bars"></div>
+      <p class="hint">Select a paper to find it.</p>
+    </aside>
+  </div>
+
+  <section class="about" id="about">
+    <div class="panel">
+      <h2>Skill set</h2>
+      <p>The methods and tools behind the work above.</p>
+      <div class="skill-groups" id="skills"></div>
+    </div>
+    <div class="panel">
+      <h2>Open to roles</h2>
+      <p>I am looking for positions that combine research depth with hands-on AI development.</p>
+      <ul class="roles" id="roles"></ul>
+      <p class="cta"><a class="btn primary" href="https://www.linkedin.com/in/keerthana-murugaraj" target="_blank" rel="noopener">Contact me on LinkedIn ↗</a></p>
+      <h4>In progress</h4>
+      <p style="margin:0 0 16px; font-size:14.5px; color:var(--text-2)">Doc2Interview, a RAG platform that turns technical documentation into interview material, and InterviewPilot, a multi-agent interview preparation platform.</p>
+      <h4>Elsewhere</h4>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/keerthana-murugaraj" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://scholar.google.com/citations?hl=en&user=np0jog4AAAAJ" target="_blank" rel="noopener">Google Scholar profile ↗</a>
+        <a href="https://github.com/KeerthanaMurugaraj" target="_blank" rel="noopener">GitHub repositories ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>Publications and citation counts are from Google Scholar, as of <span class="asof"></span>. <span id="gh-status">Repositories load live from GitHub.</span> Results are ranked with BM25 in your browser, and nothing you type leaves this page.</footer>
+</div>
+
+<script>
+// ---------- Content ----------
+const GH_USER = "KeerthanaMurugaraj";
+const SCHOLAR_USER = "np0jog4AAAAJ";
+const ME = "K Murugaraj";
+// Google Scholar has no public API, so these numbers are a saved copy. When scholar.json is present
+// (written by scripts/update_scholar.py), its numbers replace them and any new papers are added.
+const SCHOLAR = { asOf: "9 October 2026", citations: 46, hIndex: 4 };
+
+const PUBLICATIONS = [
+  {
+    id: "rectify", short: "Rectify", year: 2026, cites: 0, scholar: "WF5omc3nYNoC", arxiv: "2609.16764",
+    title: "RECTIFY: An Interactive Workbench for Post-Evaluation RAG Diagnosis, Repair, and Verification",
+    authors: "K Murugaraj, S Lamsiyah, M Theobald", venue: "arXiv", type: "Preprint",
+    repo: "Rectify-An-Interactive-Workbench-for-Post-Evaluation-RAG-Repair-and-Verification",
+    snippet: "An interactive workbench for diagnosing, repairing and verifying RAG pipelines after they have been evaluated.",
+    points: [
+      "Helps practitioners identify and diagnose failure modes in a RAG pipeline.",
+      "Lets them apply a fix and verify that it worked.",
+    ],
+    topics: ["RAG", "Evaluation"],
+  },
+  {
+    id: "ragvue", short: "RAGVue", year: 2026, cites: 5, scholar: "eQOLeE2rZwMC",
+    title: "RAGVUE: A Diagnostic View for Explainable and Automated Evaluation of Retrieval-Augmented Generation",
+    authors: "K Murugaraj, S Lamsiyah, M Theobald", venue: "EACL 2026, System Demonstrations", type: "Conference",
+    repo: "RAGVue-Diagnostic",
+    snippet: "A diagnostic framework for explainable, reference-free evaluation of Retrieval-Augmented Generation systems.",
+    points: [
+      "12 diagnostic metrics covering retrieval quality, grounding, faithfulness, answer completeness and failure analysis.",
+      "Each score comes with an explanation, so a low number points to what went wrong and where.",
+      "Also covers answer relevance and judge calibration for LLM-as-a-judge setups.",
+    ],
+    topics: ["RAG", "Evaluation"],
+  },
+  {
+    id: "ntm", short: "Neural topic modeling", year: 2025, cites: 1, scholar: "zYLM7Y9cAGgC", arxiv: "2512.11635",
+    title: "Automating Historical Insight Extraction from Large-Scale Newspaper Archives via Neural Topic Modeling",
+    authors: "K Murugaraj, S Lamsiyah, M During, M Theobald", venue: "arXiv", type: "Preprint",
+    repo: "Automating-Historical-Insight-Extraction-from-Large-Scale-Newspaper-Archives-via-NTM",
+    snippet: "Automated insight extraction from large-scale newspaper archives using neural topic modeling.",
+    points: [
+      "Discovers thematic patterns at archive scale.",
+      "Tracks how topics shift over time.",
+    ],
+    topics: ["Topic modeling", "Historical archives"],
+  },
+  {
+    id: "expandfuse", short: "ExpandFuse", year: 2025, cites: 1, scholar: "Y0pCki6q_DkC",
+    title: "ExpandFuse: A Hybrid Retrieval Framework with Query Expansion and Topic-Aware Reranking for Multi-Hop Question Answering",
+    authors: "K Murugaraj, S Lamsiyah, M Theobald", venue: "IEEE BigData 2025, pp. 722–729", type: "Conference",
+    snippet: "A hybrid retrieval architecture for multi-hop question answering, built around LLM-driven query expansion.",
+    points: [
+      "Sparse and dense retrieval, with topic-aware reranking.",
+      "Weighted evidence fusion across the retrieved results.",
+      "Evaluated on HotpotQA, 2WikiMultihopQA and StrategyQA.",
+    ],
+    topics: ["Retrieval"],
+  },
+  {
+    id: "topicrag", short: "Topic-RAG", year: 2025, cites: 9, scholar: "IjCSPb-OGe4C",
+    title: "Topic-RAG for Historical Newspapers: Enhancing Information Retrieval in Humanities Research through Topic-Based Retrieval-Augmented Generation",
+    authors: "K Murugaraj, S Lamsiyah, M During, M Theobald", venue: "Computational Humanities Research, pp. 1–21", type: "Journal",
+    repo: "Topic-RAG-for-Historical-Newspapers",
+    snippet: "Topic modeling integrated into a RAG pipeline, so that retrieval follows the themes of a historical archive.",
+    points: [
+      "Combines BERTopic with hybrid retrieval.",
+      "Improved evidence selection and computational efficiency over a baseline RAG system on 4,711 historical newspaper articles.",
+    ],
+    topics: ["RAG", "Retrieval", "Topic modeling", "Historical archives"],
+  },
+  {
+    id: "abstractive", short: "Abstractive summarization", year: 2025, cites: 17, scholar: "qjMakFHDy7sC",
+    title: "Abstractive Summarization of Historical Documents: A New Dataset and Novel Method Using a Domain-Specific Pretrained Model",
+    authors: "K Murugaraj, S Lamsiyah, C Schommer", venue: "IEEE Access 13, pp. 10918–10932", type: "Journal",
+    snippet: "An abstractive summarization method for historical documents, released with a new dataset.",
+    points: [
+      "Fine-tunes a transformer pretrained on historical text in an encoder-decoder architecture (HistBERTSum-Abs).",
+      "Introduces a new historical-document summarization dataset.",
+    ],
+    topics: ["Summarization", "Historical archives"],
+  },
+  {
+    id: "mining", short: "Mining the Past", year: 2025, cites: 11, scholar: "2osOgNQ5qMEC",
+    title: "Mining the Past: A Comparative Study of Classical and Neural Topic Models on Historical Newspaper Archives",
+    authors: "K Murugaraj, S Lamsiyah, M During, M Theobald", venue: "NLP4DH 2025", type: "Conference",
+    snippet: "A comparative study of classical and neural topic models on historical newspaper archives.",
+    points: [
+      "Benchmarks LDA, NMF and BERTopic on more than 148,000 articles (over 66 million words).",
+      "Compares topic coherence, interpretability and scalability in a reproducible pipeline.",
+    ],
+    topics: ["Topic modeling", "Historical archives"],
+  },
+  {
+    id: "extractive", short: "Extractive summarization", year: 2023, cites: 2, scholar: "u5HHmVD_uO8C",
+    title: "Historical-Domain Pre-Trained Language Model for Historical Extractive Text Summarization",
+    authors: "S Lamsiyah, K Murugaraj, C Schommer", venue: "CIST 2023", type: "Conference",
+    snippet: "An extractive summarization method for historical documents, built on a language model pretrained on historical text.",
+    points: [
+      "Fine-tunes HistBERT with sentence-position embeddings (HistBERTSum-Ext).",
+    ],
+    topics: ["Summarization", "Historical archives"],
+  },
+];
+
+// Full bibliographic details, used for the Cite button and the Paper link.
+const BIB = {
+  rectify: { type: "misc", key: "murugaraj2026rectify", author: "Murugaraj, Keerthana and Lamsiyah, Salima and Theobald, Martin",
+    url: "https://arxiv.org/abs/2609.16764", fields: { eprint: "2609.16764", archivePrefix: "arXiv" } },
+  ragvue: { type: "inproceedings", key: "murugaraj2026ragvue", author: "Murugaraj, Keerthana and Lamsiyah, Salima and Theobald, Martin",
+    url: "https://aclanthology.org/2026.eacl-demo.35/",
+    fields: { booktitle: "Proceedings of the 19th Conference of the European Chapter of the Association for Computational Linguistics (Volume 3: System Demonstrations)", pages: "512--526" } },
+  ntm: { type: "misc", key: "murugaraj2025automating", author: "Murugaraj, Keerthana and Lamsiyah, Salima and During, Marten and Theobald, Martin",
+    url: "https://arxiv.org/abs/2512.11635", fields: { eprint: "2512.11635", archivePrefix: "arXiv" } },
+  expandfuse: { type: "inproceedings", key: "murugaraj2025expandfuse", author: "Murugaraj, Keerthana and Lamsiyah, Salima and Theobald, Martin",
+    url: "https://ieeexplore.ieee.org/abstract/document/11402490/",
+    fields: { booktitle: "2025 IEEE International Conference on Big Data (BigData)", pages: "722--729", publisher: "IEEE" } },
+  topicrag: { type: "article", key: "murugaraj2025topicrag", author: "Murugaraj, Keerthana and Lamsiyah, Salima and During, Marten and Theobald, Martin",
+    url: "https://www.cambridge.org/core/journals/computational-humanities-research/article/topicrag-for-historical-newspapers-enhancing-information-retrieval-in-humanities-research-through-topicbased-retrievalaugmented-generation/054E6DA3416EA982F61858B30E7CAB6D",
+    fields: { journal: "Computational Humanities Research", pages: "1--21", publisher: "Cambridge University Press" } },
+  abstractive: { type: "article", key: "murugaraj2025abstractive", author: "Murugaraj, Keerthana and Lamsiyah, Salima and Schommer, Christoph",
+    url: "https://ieeexplore.ieee.org/abstract/document/10838535/",
+    fields: { journal: "IEEE Access", volume: "13", pages: "10918--10932", publisher: "IEEE" } },
+  mining: { type: "inproceedings", key: "murugaraj2025mining", author: "Murugaraj, Keerthana and Lamsiyah, Salima and During, Marten and Theobald, Martin",
+    url: "https://aclanthology.org/2025.nlp4dh-1.39/",
+    fields: { booktitle: "Proceedings of the 5th International Conference on Natural Language Processing for Digital Humanities", publisher: "Association for Computational Linguistics" } },
+  extractive: { type: "inproceedings", key: "lamsiyah2023historical", author: "Lamsiyah, Salima and Murugaraj, Keerthana and Schommer, Christoph",
+    fields: { booktitle: "8th International Conference on Computer and Information Science and Technology (CIST 2023)" } },
+};
+
+// Saved copy of the repository list, shown until the live GitHub data arrives or if it cannot be reached.
+let REPOS = [
+  { name: "RAGVue-Diagnostic", description: "A Diagnostic View for Explainable and Automated Evaluation of Retrieval-Augmented Generation", language: "Python", stars: 10, pushed: "2026-10-02" },
+  { name: "Topic-RAG-for-Historical-Newspapers", description: "Enhancing Information Retrieval in Humanities Research through Topic-Based Retrieval-Augmented Generation", language: "Jupyter Notebook", stars: 3, pushed: "2026-10-02" },
+  { name: "Rectify-An-Interactive-Workbench-for-Post-Evaluation-RAG-Repair-and-Verification", description: "", language: "Python", stars: 0, pushed: "2026-09-22" },
+  { name: "Automating-Historical-Insight-Extraction-from-Large-Scale-Newspaper-Archives-via-NTM", description: "Topic Modeling for historical domain data", language: "Jupyter Notebook", stars: 0, pushed: "2026-10-09" },
+];
+
+// The order fixes each topic's colour (--t1 to --t6), so do not reorder it.
+const TOPIC_ORDER = ["RAG", "Evaluation", "Retrieval", "Topic modeling", "Summarization", "Historical archives"];
+const TRIES = ["rag evaluation", "multi-hop retrieval", "topic modeling", "summarization"];
+
+const SKILLS = [
+  ["AI and NLP", ["RAG", "LLM evaluation", "Prompt engineering", "AI agents", "Topic modeling", "Text summarization", "Semantic search", "Multi-hop QA"]],
+  ["Information retrieval", ["BM25", "Dense and sparse retrieval", "Hybrid retrieval", "Query expansion", "Semantic reranking", "FAISS", "Chroma", "Qdrant"]],
+  ["Frameworks", ["PyTorch", "TensorFlow", "Hugging Face Transformers", "Sentence Transformers", "LangChain", "LangGraph", "CrewAI", "BERTopic", "spaCy", "FastAPI"]],
+  ["Languages and tools", ["Python", "SQL", "C++", "Docker", "Git", "Linux", "HPC", "Microsoft Azure", "Jupyter", "LaTeX"]],
+];
+const ROLES = ["Applied Scientist", "Research Engineer", "NLP Engineer", "Generative AI Engineer"];
+
+const pubByRepo = Object.fromEntries(PUBLICATIONS.filter((p) => p.repo).map((p) => [p.repo, p]));
+const findPub = (id) => PUBLICATIONS.find((p) => p.id === id);
+const repoUrl = (name) => `https://github.com/${GH_USER}/${encodeURIComponent(name)}`;
+
+// ---------- Index (BM25) ----------
+const STOP = new Set("a an and are about as at by can do for from her how i in is it me my of on or show tell that the to what which with you your".split(" "));
+function tokens(s) { return s.toLowerCase().match(/[a-z0-9]+/g) || []; }
+function stem(t) { return t.length > 3 && t.endsWith("s") && !t.endsWith("ss") ? t.slice(0, -1) : t; }
+
+let DOCS = [], AVG_LEN = 1;
+const K1 = 1.4, B = 0.75;
+
+function buildIndex() {
+  DOCS = [
+    ...PUBLICATIONS.map((p) => ({ kind: "pub", ...p, date: String(p.year), weight: p.cites })),
+    ...REPOS.map((r) => {
+      const pub = pubByRepo[r.name];
+      return {
+        kind: "repo", ...r, id: "repo:" + r.name, title: r.name.replace(/[-_]+/g, " "), pub,
+        snippet: r.description || (pub ? pub.snippet : ""), points: [], topics: pub ? pub.topics : [],
+        date: r.pushed, weight: r.stars,
+      };
+    }),
+  ];
+  for (const d of DOCS) {
+    // Title counts three times and topics twice, so matches there rank higher.
+    const text = [d.title, d.title, d.title, d.topics.join(" "), d.topics.join(" "), d.snippet, d.points.join(" "),
+      d.short || "", d.venue || "", d.type || "", d.authors || "", d.language || "", d.year || ""].join(" ");
+    d.tokens = tokens(text).map(stem);
+  }
+  AVG_LEN = DOCS.reduce((n, d) => n + d.tokens.length, 0) / DOCS.length;
+}
+
+function queryTerms(q) {
+  const all = tokens(q).map(stem);
+  const kept = all.filter((t) => !STOP.has(t));
+  return [...new Set(kept.length ? kept : all)];
+}
+
+// Terms match by prefix, so results update sensibly while a word is half typed.
+function rank(terms) {
+  const tfs = terms.map((t) => DOCS.map((d) => d.tokens.filter((x) => x.startsWith(t)).length));
+  return DOCS.map((d, i) => {
+    let score = 0;
+    terms.forEach((t, k) => {
+      const tf = tfs[k][i];
+      if (!tf) return;
+      const df = tfs[k].filter(Boolean).length;
+      const idf = Math.log(1 + (DOCS.length - df + 0.5) / (df + 0.5));
+      score += idf * (tf * (K1 + 1)) / (tf + K1 * (1 - B + B * d.tokens.length / AVG_LEN));
+    });
+    return { doc: d, score };
+  }).filter((r) => r.score > 0);
+}
+
+// ---------- Rendering ----------
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const ext = (url, label, cls = "") => `<a${cls ? ` class="${cls}"` : ""} href="${esc(url)}" target="_blank" rel="noopener">${label}</a>`;
+const topicVar = (t) => `--c: var(--t${TOPIC_ORDER.indexOf(t) + 1})`;
+const state = { q: "", tab: "pub", topic: null, sort: null };
+let lastShown = "";
+
+function hl(text, terms) {
+  if (!terms.length) return esc(text);
+  const re = new RegExp(`\\b((?:${terms.join("|")})[a-z0-9]*)`, "gi");
+  return text.split(re).map((part, i) => (i % 2 ? `<mark>${esc(part)}</mark>` : esc(part))).join("");
+}
+
+function monthYear(iso) {
+  const d = new Date(iso);
+  return isNaN(d) ? "" : d.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+}
+
+function bibtex(d) {
+  const b = BIB[d.id] || { type: "misc", key: "scholar" + d.year, author: d.authors.split(", ").join(" and "), fields: d.venue ? { note: d.venue } : {} };
+  const fields = { title: `{${d.title}}`, author: b.author, ...b.fields, year: String(d.year), ...(b.url ? { url: b.url } : {}) };
+  return `@${b.type}{${b.key},\n` + Object.entries(fields).map(([k, v]) => `  ${k} = {${v}}`).join(",\n") + "\n}";
+}
+
+function tagsHTML(d, score, top, terms) {
+  const tags = d.topics.map((t) => `<span class="tag" style="${topicVar(t)}"><i class="dot"></i>${hl(t, terms)}</span>`).join("");
+  const bar = terms.length ? `<span class="score" title="BM25 relevance score"><span class="bar"><i style="width:${Math.round(100 * score / top)}%"></i></span>${score.toFixed(2)}</span>` : "";
+  return tags || bar ? `<div class="row">${tags}${bar}</div>` : "";
+}
+
+function pubHTML(d, score, top, terms) {
+  const scholarUrl = `https://scholar.google.com/citations?view_op=view_citation&hl=en&user=${SCHOLAR_USER}&citation_for_view=${SCHOLAR_USER}:${d.scholar}`;
+  const repo = d.repo && REPOS.find((r) => r.name === d.repo);
+  const hit = d.points.some((p) => terms.some((t) => tokens(p).map(stem).some((x) => x.startsWith(t))));
+  const authors = d.authors.split(", ").map((a) => (a === ME ? `<b>${a}</b>` : esc(a))).join(", ");
+  const paperUrl = !d.arxiv && BIB[d.id] && BIB[d.id].url;
+  return `<article class="result">
+    <div class="rail">
+      <span class="big">${d.year}</span>
+      <span class="small"><b>${d.cites}</b> citation${d.cites === 1 ? "" : "s"}</span>
+    </div>
+    <div>
+      <div class="crumb"><span class="kind ${esc(d.type.toLowerCase())}">${esc(d.type)}</span>${hl(d.venue, terms)}</div>
+      <h2>${ext(scholarUrl, hl(d.title, terms))}</h2>
+      <p class="authors">${authors}</p>
+      ${d.snippet ? `<p class="snippet">${hl(d.snippet, terms)}</p>` : ""}
+      ${tagsHTML(d, score, top, terms)}
+      <div class="actions">
+        ${paperUrl ? ext(paperUrl, "Paper ↗", "btn") : ""}
+        ${d.arxiv ? ext(`https://arxiv.org/abs/${d.arxiv}`, "arXiv ↗", "btn") : ""}
+        ${d.repo ? ext(repoUrl(d.repo), `Code${repo && repo.stars ? ` · ★ ${repo.stars}` : ""} ↗`, "btn") : ""}
+        ${ext(scholarUrl, "Google Scholar ↗", "btn")}
+        <button class="btn" data-cite="${esc(d.id)}">Cite</button>
+      </div>
+      ${d.points.length ? `<details${hit ? " open" : ""}><summary>Details</summary><ul>${d.points.map((p) => `<li>${hl(p, terms)}</li>`).join("")}</ul></details>` : ""}
+    </div>
+  </article>`;
+}
+
+function repoHTML(d, score, top, terms) {
+  const updated = monthYear(d.pushed);
+  return `<article class="result">
+    <div class="rail">
+      <span class="big">★ ${d.stars}</span>
+      ${updated ? `<span class="small">Updated ${updated}</span>` : ""}
+    </div>
+    <div>
+      <div class="crumb mono"><span class="kind">Repository</span>github.com › ${GH_USER} › ${esc(d.name)}</div>
+      <h2>${ext(repoUrl(d.name), hl(d.title, terms))}</h2>
+      ${d.snippet ? `<p class="snippet">${hl(d.snippet, terms)}</p>` : ""}
+      ${tagsHTML(d, score, top, terms)}
+      <div class="actions">
+        ${ext(repoUrl(d.name), "View on GitHub ↗", "btn")}
+        ${d.pub ? `<button class="btn" data-pub="${esc(d.pub.id)}">Paper: ${esc(d.pub.short)}</button>` : ""}
+        ${d.language ? `<span class="plain">${esc(d.language)}</span>` : ""}
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderBars() {
+  const max = Math.max(1, ...PUBLICATIONS.map((p) => p.cites));
+  $("#bars").innerHTML = [...PUBLICATIONS].sort((a, b) => b.cites - a.cites || b.year - a.year).map((p) =>
+    `<button class="bar-item" data-pub="${esc(p.id)}" aria-pressed="${state.q === p.short}" title="${esc(p.title)} (${p.year}): ${p.cites} citation${p.cites === 1 ? "" : "s"}">
+      <span class="label">${esc(p.short)} <i>· ${p.year}</i></span>
+      <span class="track">${p.cites ? `<span class="fill" style="width:${(100 * p.cites / max).toFixed(1)}%"></span>` : ""}</span>
+      <span class="val">${p.cites}</span>
+    </button>`).join("");
+}
+
+function render() {
+  const terms = queryTerms(state.q);
+  const matched = terms.length ? rank(terms) : DOCS.map((doc) => ({ doc, score: 0 }));
+  const inTopic = matched.filter((r) => !state.topic || r.doc.topics.includes(state.topic));
+
+  $("#tabs").innerHTML = [["pub", "Publications"], ["repo", "Code"]].map(([id, label]) =>
+    `<button class="tab" role="tab" data-tab="${id}" aria-selected="${state.tab === id}">${label} <span class="n">${inTopic.filter((r) => r.doc.kind === id).length}</span></button>`).join("");
+
+  // Facet counts ignore the selected topic, so the other topics stay comparable.
+  const inTab = matched.filter((r) => r.doc.kind === state.tab);
+  $("#facets").innerHTML = TOPIC_ORDER.map((t) =>
+    `<button class="facet" style="${topicVar(t)}" data-topic="${t}" aria-pressed="${state.topic === t}"><i class="dot"></i>${t} <span class="n">${inTab.filter((r) => r.doc.topics.includes(t)).length}</span></button>`).join("");
+
+  const sort = state.sort === "match" && !terms.length ? "new" : state.sort || (terms.length ? "match" : "new");
+  const options = [["match", "Best match"], ["new", "Newest"], ["top", state.tab === "pub" ? "Most cited" : "Most starred"]];
+  $("#sort").innerHTML = "Sort: " + options.filter(([id]) => id !== "match" || terms.length).map(([id, label]) =>
+    `<button data-sort="${id}" aria-pressed="${sort === id}">${label}</button>`).join("");
+
+  const rows = inTopic.filter((r) => r.doc.kind === state.tab);
+  const top = Math.max(1e-9, ...rows.map((r) => r.score));
+  rows.sort((a, b) => sort === "match" ? b.score - a.score
+    : sort === "top" ? b.doc.weight - a.doc.weight || b.doc.date.localeCompare(a.doc.date)
+    : b.doc.date.localeCompare(a.doc.date) || b.doc.weight - a.doc.weight);
+
+  const n = rows.length;
+  const noun = state.tab === "pub" ? (n === 1 ? "publication" : "publications") : (n === 1 ? "repository" : "repositories");
+  $("#stats").textContent = `${n} ${noun}` + (terms.length ? ` for “${state.q.trim()}”` : "");
+
+  // Animate only when the set or order of results changes, not on every keystroke.
+  const shown = rows.map((r) => r.doc.id).join("|");
+  const results = $("#results");
+  results.classList.toggle("fresh", shown !== lastShown);
+  lastShown = shown;
+  results.innerHTML = n
+    ? rows.map((r) => (r.doc.kind === "pub" ? pubHTML : repoHTML)(r.doc, r.score, top, terms)).join("")
+    : `<div class="empty">Nothing matches that here. Try a broader query such as “retrieval” or “topic”, remove the topic filter, or check the other tab.</div>`;
+
+  const stars = REPOS.reduce((sum, r) => sum + r.stars, 0);
+  const firstAuthor = PUBLICATIONS.filter((p) => p.authors.startsWith(ME)).length;
+  $("#metrics").innerHTML = [[PUBLICATIONS.length, "Publications"], [firstAuthor, "As first author"], [SCHOLAR.citations, "Citations"], [SCHOLAR.hIndex, "h-index"], [REPOS.length, "Repositories"], [stars, "GitHub stars"]]
+    .map(([v, label]) => `<div class="stat"><b>${v}</b><span>${label}</span></div>`).join("");
+  renderBars();
+
+  $("#clear").hidden = !state.q;
+  $("#slash").hidden = !!state.q;
+  const params = new URLSearchParams();
+  if (state.q.trim()) params.set("q", state.q.trim());
+  if (state.topic) params.set("topic", state.topic);
+  if (state.tab !== "pub") params.set("tab", state.tab);
+  const qs = params.toString();
+  try { history.replaceState(null, "", (qs ? "?" + qs : location.pathname) + location.hash); } catch (e) {}
+}
+
+// ---------- Live GitHub data ----------
+function useRepos(list) {
+  REPOS = list.filter((r) => !r.fork && !/\.github\.io$/i.test(r.name) && r.name !== GH_USER).map((r) => ({
+    name: String(r.name), description: r.description ? String(r.description) : "", language: r.language ? String(r.language) : "",
+    stars: Number(r.stargazers_count) || 0, pushed: String(r.pushed_at || ""),
+  }));
+  buildIndex();
+  render();
+  $("#gh-status").textContent = "Repositories are live from GitHub.";
+}
+
+async function loadRepos() {
+  const KEY = "portfolio-repos";
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(KEY) || "null");
+    if (cached) return useRepos(cached);
+  } catch (e) {}
+  try {
+    const res = await fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=updated`, { headers: { Accept: "application/vnd.github+json" } });
+    if (!res.ok) throw new Error(res.status);
+    const list = await res.json();
+    if (!Array.isArray(list) || !list.length) throw new Error("empty");
+    try { sessionStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
+    useRepos(list);
+  } catch (e) {
+    $("#gh-status").textContent = "GitHub could not be reached, so repositories show a saved copy.";
+  }
+}
+
+// ---------- Fresh Google Scholar data ----------
+function showAsOf() {
+  document.querySelectorAll(".asof").forEach((el) => { el.textContent = SCHOLAR.asOf; });
+}
+
+async function loadScholar() {
+  let data;
+  try {
+    const res = await fetch("scholar.json", { cache: "no-cache" });
+    if (!res.ok) return;
+    data = await res.json();
+  } catch (e) { return; }  // not published yet, or opened as a local file: keep the saved numbers
+  if (!data || !Array.isArray(data.papers) || !Number.isFinite(data.citations)) return;
+
+  SCHOLAR.citations = data.citations;
+  if (Number.isFinite(data.h_index)) SCHOLAR.hIndex = data.h_index;
+  if (typeof data.as_of === "string") SCHOLAR.asOf = data.as_of;
+  for (const p of data.papers) {
+    if (!p || !/^[\w-]+$/.test(p.scholar) || typeof p.title !== "string") continue;
+    const cites = Number(p.cites) || 0;
+    const known = PUBLICATIONS.find((x) => x.scholar === p.scholar);
+    if (known) { known.cites = cites; continue; }
+    // A paper that is on Scholar but not described above yet: list it with what Scholar knows.
+    PUBLICATIONS.push({
+      id: "s:" + p.scholar, short: p.title.split(":")[0].slice(0, 40), year: Number(p.year) || new Date().getFullYear(), cites,
+      scholar: p.scholar, title: p.title, authors: String(p.authors || ""), venue: String(p.venue || ""), type: "Paper",
+      snippet: "", points: [], topics: [],
+    });
+  }
+  showAsOf();
+  buildIndex();
+  render();
+}
+
+// ---------- Cite ----------
+function copyCite(button) {
+  const text = bibtex(findPub(button.dataset.cite));
+  const done = (ok) => {
+    button.textContent = ok ? "BibTeX copied" : "Copy failed";
+    setTimeout(() => { button.textContent = "Cite"; }, 1600);
+  };
+  const fallback = () => {
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.append(area);
+    area.select();
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) {}
+    area.remove();
+    done(ok);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done(true), fallback);
+  else fallback();
+}
+
+// ---------- Events ----------
+const q = $("#q");
+function setQuery(text) { state.q = text; q.value = text; render(); }
+q.addEventListener("input", () => { state.q = q.value; render(); });
+$("#clear").addEventListener("click", () => { setQuery(""); q.focus(); });
+
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-tab], [data-topic], [data-try], [data-sort], [data-pub], [data-cite]");
+  if (!t) return;
+  if (t.dataset.cite) return copyCite(t);
+  if (t.dataset.tab) { state.tab = t.dataset.tab; state.sort = null; }
+  else if (t.dataset.topic) state.topic = state.topic === t.dataset.topic ? null : t.dataset.topic;
+  else if (t.dataset.sort) state.sort = t.dataset.sort;
+  else if (t.dataset.try) return setQuery(t.dataset.try);
+  else {
+    // A paper chosen from the chart or a repository: show it, or clear the search if it is already selected.
+    const short = findPub(t.dataset.pub).short;
+    state.tab = "pub"; state.topic = null; state.sort = null;
+    return setQuery(state.q === short ? "" : short);
+  }
+  render();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "/" && document.activeElement !== q) { e.preventDefault(); q.focus(); }
+  else if (e.key === "Escape" && document.activeElement === q) setQuery("");
+});
+
+function applyMode(m) { document.documentElement.dataset.mode = m; }
+$("#mode-btn").addEventListener("click", () => {
+  const m = document.documentElement.dataset.mode === "dark" ? "light" : "dark";
+  applyMode(m);
+  try { localStorage.setItem("portfolio-mode", m); } catch (e) {}
+});
+let savedMode = null;
+try { savedMode = localStorage.getItem("portfolio-mode"); } catch (e) {}
+applyMode(savedMode || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+
+// ---------- Start ----------
+$("#tries").innerHTML = TRIES.map((t) => `<button class="try" data-try="${t}">${t}</button>`).join(" · ");
+$("#skills").innerHTML = SKILLS.map(([group, items]) =>
+  `<div><h4>${group}</h4><div class="row">${items.map((s) => `<span class="plain">${s}</span>`).join("")}</div></div>`).join("");
+$("#roles").innerHTML = ROLES.map((r) => `<li>${r}</li>`).join("");
+showAsOf();
+
+const start = new URLSearchParams(location.search);
+if (TOPIC_ORDER.includes(start.get("topic"))) state.topic = start.get("topic");
+if (start.get("tab") === "repo") state.tab = "repo";
+buildIndex();
+setQuery(start.get("q") || "");
+loadRepos();
+loadScholar();
+</script>
+</body>
+</html>

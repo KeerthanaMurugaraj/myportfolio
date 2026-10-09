@@ -1,0 +1,14 @@
+# Personal documents: keep these off GitHub
+*.pdf
+cv_img.png
+
+# Local tooling
+.DS_Store
+.idea/
+.claude/
+
+# Draft for the separate GitHub profile repository
+github-profile/
+
+# Earlier versions of the page, kept locally only
+archive/

@@ -1,0 +1,71 @@
+{
+  "as_of": "9 October 2026",
+  "citations": 46,
+  "h_index": 4,
+  "papers": [
+    {
+      "scholar": "WF5omc3nYNoC",
+      "title": "RECTIFY: An Interactive Workbench for Post-Evaluation RAG Diagnosis, Repair, and Verification",
+      "authors": "K Murugaraj, S Lamsiyah, M Theobald",
+      "venue": "arXiv preprint arXiv:2609.16764",
+      "year": 2026,
+      "cites": 0
+    },
+    {
+      "scholar": "eQOLeE2rZwMC",
+      "title": "RAGVUE: A Diagnostic View for Explainable and Automated Evaluation of Retrieval-Augmented Generation",
+      "authors": "K Murugaraj, S Lamsiyah, M Theobald",
+      "venue": "Proceedings of the 19th Conference of the European Chapter of the …",
+      "year": 2026,
+      "cites": 5
+    },
+    {
+      "scholar": "zYLM7Y9cAGgC",
+      "title": "Automating historical insight extraction from large-scale newspaper archives via neural topic modeling",
+      "authors": "K Murugaraj, S Lamsiyah, M During, M Theobald",
+      "venue": "arXiv preprint arXiv:2512.11635",
+      "year": 2025,
+      "cites": 1
+    },
+    {
+      "scholar": "Y0pCki6q_DkC",
+      "title": "ExpandFuse: A Hybrid Retrieval Framework with Query Expansion and Topic-Aware Reranking for Multi-Hop Question Answering",
+      "authors": "K Murugaraj, S Lamsiyah, M Theobald",
+      "venue": "2025 IEEE International Conference on Big Data (BigData), 722-729",
+      "year": 2025,
+      "cites": 1
+    },
+    {
+      "scholar": "IjCSPb-OGe4C",
+      "title": "Topic-RAG for Historical Newspapers: Enhancing Information Retrieval in Humanities Research through Topic-Based Retrieval-Augmented Generation",
+      "authors": "K Murugaraj, S Lamsiyah, M During, M Theobald",
+      "venue": "Computational Humanities Research, 1-21",
+      "year": 2025,
+      "cites": 9
+    },
+    {
+      "scholar": "qjMakFHDy7sC",
+      "title": "Abstractive summarization of historical documents: A new dataset and novel method using a domain-specific pretrained model",
+      "authors": "K Murugaraj, S Lamsiyah, C Schommer",
+      "venue": "IEEE Access 13, 10918-10932",
+      "year": 2025,
+      "cites": 17
+    },
+    {
+      "scholar": "2osOgNQ5qMEC",
+      "title": "Mining the Past: A Comparative Study of Classical and Neural Topic Models on Historical Newspaper Archives",
+      "authors": "M Keerthana, L Salima, D Marten, T Martin",
+      "venue": "Proceedings of the 5th International Conference on Natural Language …",
+      "year": 2025,
+      "cites": 11
+    },
+    {
+      "scholar": "u5HHmVD_uO8C",
+      "title": "Historical-domain pre-trained language model for historical extractive text summarization",
+      "authors": "S LAMSIYAH, K MURUGARAJ, C SCHOMMER",
+      "venue": "8th International Conference on Computer and Information Science and …",
+      "year": 2023,
+      "cites": 2
+    }
+  ]
+}
