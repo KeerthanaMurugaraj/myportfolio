@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Keerthana Murugaraj — Research Search</title>
 <meta name="description" content="Search the publications and open-source code of Keerthana Murugaraj: RAG evaluation, retrieval, and topic modeling for historical archives.">
-<link rel="canonical" href="https://keerthanamurugaraj.github.io/">
+<link rel="canonical" href="https://keerthanamurugaraj.github.io/myportfolio/">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://keerthanamurugaraj.github.io/">
+<meta property="og:url" content="https://keerthanamurugaraj.github.io/myportfolio/">
 <meta property="og:title" content="Keerthana Murugaraj — Research Search">
 <meta property="og:description" content="Publications and open-source code on RAG evaluation, retrieval and topic modeling, in a small search engine.">
-<meta property="og:image" content="https://keerthanamurugaraj.github.io/og.png">
+<meta property="og:image" content="https://keerthanamurugaraj.github.io/myportfolio/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -664,7 +664,9 @@ function render() {
 
 // ---------- Live GitHub data ----------
 function useRepos(list) {
-  REPOS = list.filter((r) => !r.fork && !/\.github\.io$/i.test(r.name) && r.name !== GH_USER).map((r) => ({
+  // Leave out the repository that hosts this page itself.
+  const siteRepo = location.hostname.endsWith(".github.io") ? location.pathname.split("/")[1] : "";
+  REPOS = list.filter((r) => !r.fork && !/\.github\.io$/i.test(r.name) && r.name !== GH_USER && r.name !== siteRepo).map((r) => ({
     name: String(r.name), description: r.description ? String(r.description) : "", language: r.language ? String(r.language) : "",
     stars: Number(r.stargazers_count) || 0, pushed: String(r.pushed_at || ""),
   }));
