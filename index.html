@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Keerthana Murugaraj — Research Search</title>
-<meta name="description" content="Search the publications and open-source code of Keerthana Murugaraj: RAG evaluation, retrieval, and topic modeling for historical archives.">
+<title>Keerthana Murugaraj — Papers and Projects</title>
+<meta name="description" content="Search the papers, research code and personal projects of Keerthana Murugaraj: RAG evaluation, retrieval, topic modeling and data pipelines.">
 <link rel="canonical" href="https://keerthanamurugaraj.github.io/myportfolio/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://keerthanamurugaraj.github.io/myportfolio/">
-<meta property="og:title" content="Keerthana Murugaraj — Research Search">
-<meta property="og:description" content="Publications and open-source code on RAG evaluation, retrieval and topic modeling, in a small search engine.">
+<meta property="og:title" content="Keerthana Murugaraj — Papers and Projects">
+<meta property="og:description" content="Papers, research code and personal projects on RAG evaluation, retrieval and topic modeling, in a small search engine.">
 <meta property="og:image" content="https://keerthanamurugaraj.github.io/myportfolio/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -33,7 +33,7 @@
     --mark: #FBE7A1;
     --shadow: 0 1px 2px rgb(20 30 30 / 0.05), 0 8px 24px rgb(20 30 30 / 0.06);
     /* Topic colours, in fixed order */
-    --t1: #2a78d6; --t2: #eb6834; --t3: #1baf7a; --t4: #eda100; --t5: #e87ba4; --t6: #008300;
+    --t1: #2a78d6; --t2: #eb6834; --t3: #1baf7a; --t4: #eda100; --t5: #e87ba4; --t6: #008300; --t7: #7a5fd0;
     --serif: "Source Serif 4", "Iowan Old Style", Palatino, Georgia, serif;
     --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -51,7 +51,7 @@
     --on-accent: #0E1113;
     --mark: #5C4A0E;
     --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.25);
-    --t1: #3987e5; --t2: #d95926; --t3: #199e70; --t4: #c98500; --t5: #d55181; --t6: #008300;
+    --t1: #3987e5; --t2: #d95926; --t3: #199e70; --t4: #c98500; --t5: #d55181; --t6: #008300; --t7: #8f76e0;
   }
   * { box-sizing: border-box; }
   body {
@@ -220,6 +220,8 @@
     .hero { padding: 24px 0 26px; }
     #slash { display: none; }
     .top-row a.opt { display: none; }
+    .tabs { flex-wrap: wrap; gap: 0 16px; }
+    .tab { font-size: 14px; }
     .facets { flex-basis: 100%; }
     .stats { gap: 8px; }
     .stat { padding: 10px 12px; }
@@ -252,16 +254,16 @@
 
     <div class="hero">
       <p class="eyebrow">Doctoral researcher · NLP and information retrieval</p>
-      <h1>Search my research</h1>
-      <p class="lede">Publications and open-source code on RAG evaluation, retrieval and topic modeling for historical archives, ranked live for whatever you type.</p>
+      <h1>Papers I’ve written, things I’ve built</h1>
+      <p class="lede">Paper publications, research code and personal projects across RAG evaluation, retrieval and topic modeling, ranked live for whatever you type.</p>
       <div id="box" role="search">
         <svg width="20" height="20" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.8"/><path d="M12.5 12.5L16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        <input id="q" type="search" placeholder="Try “multi-hop retrieval”" aria-label="Search publications and code" autocomplete="off" spellcheck="false">
+        <input id="q" type="search" placeholder="Try “multi-hop retrieval”" aria-label="Search publications and projects" autocomplete="off" spellcheck="false">
         <button id="clear" hidden>Clear</button>
         <kbd id="slash">/</kbd>
       </div>
       <div class="tries">Try: <span id="tries"></span></div>
-      <a class="open-to" href="#about"><i></i> Open to Applied Scientist, Research Engineer and Generative AI roles</a>
+      <a class="open-to" href="#about"><i></i> Open to Applied Scientist, Research Engineer, Generative AI and Data Scientist roles</a>
     </div>
   </div>
 </div>
@@ -449,19 +451,34 @@ let REPOS = [
   { name: "Topic-RAG-for-Historical-Newspapers", description: "Enhancing Information Retrieval in Humanities Research through Topic-Based Retrieval-Augmented Generation", language: "Jupyter Notebook", stars: 3, pushed: "2026-10-02" },
   { name: "Rectify-An-Interactive-Workbench-for-Post-Evaluation-RAG-Repair-and-Verification", description: "", language: "Python", stars: 0, pushed: "2026-09-22" },
   { name: "Automating-Historical-Insight-Extraction-from-Large-Scale-Newspaper-Archives-via-NTM", description: "Topic Modeling for historical domain data", language: "Jupyter Notebook", stars: 0, pushed: "2026-10-09" },
+  { name: "Property-listings-pipeline-with-Airflow-and-RAG-search", description: "", language: "Python", stars: 0, pushed: "2026-10-13" },
 ];
 
-// The order fixes each topic's colour (--t1 to --t6), so do not reorder it.
-const TOPIC_ORDER = ["RAG", "Evaluation", "Retrieval", "Topic modeling", "Summarization", "Historical archives"];
-const TRIES = ["rag evaluation", "multi-hop retrieval", "topic modeling", "summarization"];
+// Shorter display names, plus a summary and topics for repositories that have no publication.
+// A repository missing here is still listed, under its GitHub name and description.
+const REPO_INFO = {
+  "RAGVue-Diagnostic": { title: "RAGVue" },
+  "Rectify-An-Interactive-Workbench-for-Post-Evaluation-RAG-Repair-and-Verification": { title: "Rectify" },
+  "Topic-RAG-for-Historical-Newspapers": { title: "Topic-RAG for Historical Newspapers" },
+  "Automating-Historical-Insight-Extraction-from-Large-Scale-Newspaper-Archives-via-NTM": { title: "Historical insight extraction with neural topic modeling" },
+  "Property-listings-pipeline-with-Airflow-and-RAG-search": {
+    title: "Property listings pipeline with Airflow and RAG search",
+    summary: "An end-to-end data pipeline orchestrated with Apache Airflow: rental listings from three simulated estate agencies are collected daily, cleaned and merged in SQL with DuckDB, and made searchable in plain language through a LanceDB index that goes live only after it passes an evaluation.",
+    topics: ["Data engineering", "RAG", "Retrieval"],
+  },
+};
+
+// The order fixes each topic's colour (--t1 to --t7), so do not reorder it.
+const TOPIC_ORDER = ["RAG", "Evaluation", "Retrieval", "Topic modeling", "Summarization", "Historical archives", "Data engineering"];
+const TRIES = ["rag evaluation", "multi-hop retrieval", "topic modeling", "summarization", "airflow"];
 
 const SKILLS = [
   ["AI and NLP", ["RAG", "LLM evaluation", "Prompt engineering", "AI agents", "Topic modeling", "Text summarization", "Semantic search", "Multi-hop QA"]],
-  ["Information retrieval", ["BM25", "Dense and sparse retrieval", "Hybrid retrieval", "Query expansion", "Semantic reranking", "FAISS", "Chroma", "Qdrant"]],
+  ["Information retrieval", ["BM25", "Dense and sparse retrieval", "Hybrid retrieval", "Query expansion", "Semantic reranking", "FAISS", "Chroma", "Qdrant", "LanceDB"]],
   ["Frameworks", ["PyTorch", "TensorFlow", "Hugging Face Transformers", "Sentence Transformers", "LangChain", "LangGraph", "CrewAI", "BERTopic", "spaCy", "FastAPI"]],
-  ["Languages and tools", ["Python", "SQL", "C++", "Docker", "Git", "Linux", "HPC", "Microsoft Azure", "Jupyter", "LaTeX"]],
+  ["Languages and tools", ["Python", "SQL", "C++", "Apache Airflow", "DuckDB", "Docker", "Git", "Linux", "HPC", "Microsoft Azure", "Jupyter", "LaTeX"]],
 ];
-const ROLES = ["Applied Scientist", "Research Engineer", "NLP Engineer", "Generative AI Engineer"];
+const ROLES = ["Applied Scientist", "Research Engineer", "NLP Engineer", "Generative AI Engineer", "Data Scientist"];
 
 const pubByRepo = Object.fromEntries(PUBLICATIONS.filter((p) => p.repo).map((p) => [p.repo, p]));
 const findPub = (id) => PUBLICATIONS.find((p) => p.id === id);
@@ -480,9 +497,11 @@ function buildIndex() {
     ...PUBLICATIONS.map((p) => ({ kind: "pub", ...p, date: String(p.year), weight: p.cites })),
     ...REPOS.map((r) => {
       const pub = pubByRepo[r.name];
+      const info = REPO_INFO[r.name] || {};
       return {
-        kind: "repo", ...r, id: "repo:" + r.name, title: r.name.replace(/[-_]+/g, " "), pub,
-        snippet: r.description || (pub ? pub.snippet : ""), points: [], topics: pub ? pub.topics : [],
+        // A repository behind a publication is research code; any other is a personal project.
+        kind: pub ? "repo" : "personal", ...r, id: "repo:" + r.name, title: info.title || r.name.replace(/[-_]+/g, " "), pub,
+        snippet: r.description || info.summary || (pub ? pub.snippet : ""), points: [], topics: pub ? pub.topics : info.topics || [],
         date: r.pushed, weight: r.stars,
       };
     }),
@@ -490,7 +509,7 @@ function buildIndex() {
   for (const d of DOCS) {
     // Title counts three times and topics twice, so matches there rank higher.
     const text = [d.title, d.title, d.title, d.topics.join(" "), d.topics.join(" "), d.snippet, d.points.join(" "),
-      d.short || "", d.venue || "", d.type || "", d.authors || "", d.language || "", d.year || ""].join(" ");
+      d.short || "", d.venue || "", d.type || "", d.authors || "", d.language || "", d.year || "", d.name || ""].join(" ");
     d.tokens = tokens(text).map(stem);
   }
   AVG_LEN = DOCS.reduce((n, d) => n + d.tokens.length, 0) / DOCS.length;
@@ -614,11 +633,12 @@ function render() {
   const matched = terms.length ? rank(terms) : DOCS.map((doc) => ({ doc, score: 0 }));
   const inTopic = matched.filter((r) => !state.topic || r.doc.topics.includes(state.topic));
 
-  $("#tabs").innerHTML = [["pub", "Publications"], ["repo", "Code"]].map(([id, label]) =>
+  $("#tabs").innerHTML = [["pub", "Paper publications"], ["repo", "Research code"], ["personal", "Personal projects"]].map(([id, label]) =>
     `<button class="tab" role="tab" data-tab="${id}" aria-selected="${state.tab === id}">${label} <span class="n">${inTopic.filter((r) => r.doc.kind === id).length}</span></button>`).join("");
 
   // Facet counts ignore the selected topic, so the other topics stay comparable.
   const inTab = matched.filter((r) => r.doc.kind === state.tab);
+  $("#facets").style.display = DOCS.some((d) => d.kind === state.tab && d.topics.length) ? "" : "none";
   $("#facets").innerHTML = TOPIC_ORDER.map((t) =>
     `<button class="facet" style="${topicVar(t)}" data-topic="${t}" aria-pressed="${state.topic === t}"><i class="dot"></i>${t} <span class="n">${inTab.filter((r) => r.doc.topics.includes(t)).length}</span></button>`).join("");
 
@@ -763,7 +783,13 @@ document.addEventListener("click", (e) => {
   if (t.dataset.tab) { state.tab = t.dataset.tab; state.sort = null; }
   else if (t.dataset.topic) state.topic = state.topic === t.dataset.topic ? null : t.dataset.topic;
   else if (t.dataset.sort) state.sort = t.dataset.sort;
-  else if (t.dataset.try) return setQuery(t.dataset.try);
+  else if (t.dataset.try) {
+    // Open the tab that holds the matches when the current one has none.
+    const kinds = rank(queryTerms(t.dataset.try)).map((r) => r.doc.kind);
+    if (kinds.length && !kinds.includes(state.tab)) { state.tab = kinds[0]; state.sort = null; }
+    state.topic = null;
+    return setQuery(t.dataset.try);
+  }
   else {
     // A paper chosen from the chart or a repository: show it, or clear the search if it is already selected.
     const short = findPub(t.dataset.pub).short;
@@ -797,7 +823,7 @@ showAsOf();
 
 const start = new URLSearchParams(location.search);
 if (TOPIC_ORDER.includes(start.get("topic"))) state.topic = start.get("topic");
-if (start.get("tab") === "repo") state.tab = "repo";
+if (["repo", "personal"].includes(start.get("tab"))) state.tab = start.get("tab");
 buildIndex();
 setQuery(start.get("q") || "");
 loadRepos();
