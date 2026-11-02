@@ -1,6 +1,6 @@
 {
-  "as_of": "26 October 2026",
-  "citations": 48,
+  "as_of": "2 November 2026",
+  "citations": 51,
   "h_index": 4,
   "papers": [
     {
@@ -17,12 +17,12 @@
       "authors": "K Murugaraj, S Lamsiyah, M Theobald",
       "venue": "Proceedings of the 19th Conference of the European Chapter of the …",
       "year": 2026,
-      "cites": 5
+      "cites": 8
     },
     {
       "scholar": "ufrVoPGSRksC",
       "title": "LUXDIAG-RAG: Diagnostic Evaluation of Retrieval-Augmented Generation for Luxembourgish Reading Comprehension",
-      "authors": "K Murugaraj, ...",
+      "authors": "K Murugaraj, H Tebourbi, C Friezas Gonçalves, S Lamsiyah",
       "venue": "Proceedings of the First International Conference on Language Technologies …",
       "year": 2026,
       "cites": 0
