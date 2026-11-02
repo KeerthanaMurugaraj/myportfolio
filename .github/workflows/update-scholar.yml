@@ -1,11 +1,12 @@
 name: Update Scholar numbers
 
-# Refreshes scholar.json every Monday. Google Scholar often blocks requests from
-# GitHub's servers; when that happens the run fails and scholar.json is left as it
-# was, and the next week's run tries again. Run `python3 scripts/update_scholar.py` on your own computer in that case.
+# Refreshes scholar.json every day. Google Scholar often blocks requests from
+# GitHub's servers; when that happens the run logs a warning, leaves scholar.json
+# as it was, and the next day's run tries again. A weekly job on Keerthana's Mac
+# runs the same script (scripts/update_and_commit.sh) as a backup.
 on:
   schedule:
-    - cron: "0 6 * * 1"
+    - cron: "17 6 * * *"
   workflow_dispatch:
 
 permissions:
@@ -16,17 +17,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch Google Scholar profile
-        run: python3 scripts/update_scholar.py
-      - name: Commit if the numbers changed
-        run: |
-          # The date alone changing is not worth a commit.
-          if git diff --quiet -I '"as_of"' -- scholar.json; then
-            echo "No change in publications or citations."
-            git checkout -- scholar.json
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Update Google Scholar numbers" scholar.json
-          git push
+      - name: Fetch Google Scholar profile and commit if the numbers changed
+        run: bash scripts/update_and_commit.sh
